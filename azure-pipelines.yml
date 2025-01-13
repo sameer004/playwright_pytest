@@ -1,0 +1,21 @@
+trigger:
+- develop
+
+pool:
+  vmImage: 'windows-latest'
+
+steps:
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3.11'
+  displayName: 'Use Python'
+- script: |
+    .\venv\Scripts\activate  # Activate virtual environment
+    python -m pip install --upgrade pip
+    pip install playwright
+    pip install pytest
+  displayName: 'Install dependencies'
+- script: playwright install --with-deps
+  displayName: 'Install Playwright browsers'
+- script: pytest
+  displayName: 'Run Playwright tests'
